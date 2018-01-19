@@ -34,6 +34,7 @@ type driver struct {
 	volume.StatsDriver
 	volume.QuiesceDriver
 	volume.CredsDriver
+	volume.CloudBackupDriver
 	nfsServer string
 	nfsPath   string
 	mounter   mount.Manager
@@ -57,14 +58,15 @@ func Init(params map[string]string) (volume.VolumeDriver, error) {
 		return nil, err
 	}
 	inst := &driver{
-		IODriver:        volume.IONotSupported,
-		StoreEnumerator: common.NewDefaultStoreEnumerator(Name, kvdb.Instance()),
-		StatsDriver:     volume.StatsNotSupported,
-		QuiesceDriver:   volume.QuiesceNotSupported,
-		CredsDriver:     volume.CredsNotSupported,
-		nfsServer:       server,
-		nfsPath:         path,
-		mounter:         mounter,
+		IODriver:          volume.IONotSupported,
+		StoreEnumerator:   common.NewDefaultStoreEnumerator(Name, kvdb.Instance()),
+		StatsDriver:       volume.StatsNotSupported,
+		QuiesceDriver:     volume.QuiesceNotSupported,
+		CredsDriver:       volume.CredsNotSupported,
+		CloudBackupDriver: volume.CloudBackupNotSupported,
+		nfsServer:         server,
+		nfsPath:           path,
+		mounter:           mounter,
 	}
 	if err := os.MkdirAll(nfsMountPath, 0744); err != nil {
 		return nil, err
